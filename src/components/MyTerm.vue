@@ -1,7 +1,7 @@
 <template>
   <div class="ws_container">
     <div class="ws_form">
-      <TermForm @onConnect="onConnect"/>
+      <TermForm @onConnect="onConnect" @onCloseConnection="onCloseConnection"/>
     </div>
     <div class="ws_term">
       <TermWin ref="termRef"/>
@@ -25,22 +25,28 @@ export default defineComponent({
       //ws://127.0.0.1:8080/ws
       termRef.value.initSocket("ws://127.0.0.1:8080/terminal/" + sid);
     }
-    return { onConnect, termRef }
+    const onCloseConnection = () => {
+      termRef.value.closeSocket();
+    }
+    return { onConnect, onCloseConnection, termRef }
   }
 });
 </script>
 <style scoped>
-.ws_container{
+.ws_container {
   width: 100%;
   height: 100%;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 }
-.ws_form{
-  height: 300px;
+
+.ws_form {
+  height: 500px;
 }
-.ws_term{
-  flex:1;
+
+.ws_term {
+  flex: 1;
+  background-color: black;
 }
 
 </style>

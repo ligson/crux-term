@@ -1,33 +1,39 @@
 <template>
-  <a-form
-      ref="termFormRef"
-      :model="termFormState"
-      :rules="termFormRules"
-      v-bind="layout"
-      :labelAlign="'left'">
-    <a-form-item name="scheme" label="协议(scheme)">
-      <a-input v-model:value="termFormState.scheme"/>
-    </a-form-item>
-    <a-form-item name="host" label="主机(host)">
-      <a-input v-model:value="termFormState.host"/>
-    </a-form-item>
-    <a-form-item name="port" label="端口(port)">
-      <a-input v-model:value="termFormState.port"/>
-    </a-form-item>
-    <a-form-item name="namespace" label="命名空间(namespace)">
-      <a-input v-model:value="termFormState.namespace"/>
-    </a-form-item>
-    <a-form-item name="podName" label="pod名称">
-      <a-input v-model:value="termFormState.podName"/>
-    </a-form-item>
-    <a-form-item name="containerName" label="容器名称">
-      <a-input v-model:value="termFormState.containerName"/>
-    </a-form-item>
-    <a-form-item name="token" label="令牌(token)">
-      <a-textarea v-model:value="termFormState.token"/>
-    </a-form-item>
-  </a-form>
-  <a-button type="primary" @click="handleSubmit">连接</a-button>
+  <div>
+    <a-form
+        ref="termFormRef"
+        :model="termFormState"
+        :rules="termFormRules"
+        v-bind="layout"
+        :labelAlign="'left'">
+      <a-form-item name="scheme" label="协议(scheme)">
+        <a-input v-model:value="termFormState.scheme"/>
+      </a-form-item>
+      <a-form-item name="host" label="主机(host)">
+        <a-input v-model:value="termFormState.host"/>
+      </a-form-item>
+      <a-form-item name="port" label="端口(port)">
+        <a-input v-model:value="termFormState.port"/>
+      </a-form-item>
+      <a-form-item name="namespace" label="命名空间(namespace)">
+        <a-input v-model:value="termFormState.namespace"/>
+      </a-form-item>
+      <a-form-item name="podName" label="pod名称">
+        <a-input v-model:value="termFormState.podName"/>
+      </a-form-item>
+      <a-form-item name="containerName" label="容器名称">
+        <a-input v-model:value="termFormState.containerName"/>
+      </a-form-item>
+      <a-form-item name="token" label="令牌(token)">
+        <a-textarea v-model:value="termFormState.token"/>
+      </a-form-item>
+    </a-form>
+    <a-space>
+      <a-button type="primary" @click="handleSubmit">连接</a-button>
+      <a-button type="primary" @click="closeConnection">断开连接</a-button>
+    </a-space>
+  </div>
+
 </template>
 
 <script>
@@ -37,7 +43,7 @@ import {doPost} from "@/util/HttpClient";
 
 export default defineComponent({
   name: "TermForm",
-  emits: ["onConnect"],
+  emits: ["onConnect", "onCloseConnection"],
   setup(props, ctx) {
     console.log(props)
     const termFormRef = ref()
@@ -117,7 +123,11 @@ export default defineComponent({
         console.error(err)
       })
     }
+    const closeConnection = () => {
+      ctx.emit("onCloseConnection")
+    }
     return {
+      closeConnection,
       termFormRef,
       termFormState,
       termFormRules,

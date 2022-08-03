@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import {defineComponent, ref} from 'vue'
+import {defineComponent, onBeforeUnmount, ref} from 'vue'
 import {Terminal} from 'xterm'
 import {FitAddon} from 'xterm-addon-fit'
 import {Base64} from "js-base64";
@@ -53,17 +53,7 @@ export default defineComponent({
             // 将返回的数据写入xterm，回显在webshell上
             //let str = new TextDecoder().decode(msg);
             let str = Base64.decode(msg.toString().substring(1))
-
             term.value.write(str);
-            // 此处可以判断一下，如果是首次连接，需要将rows，cols传给服务器端
-            // when server ready for connection,send resize to server
-            // socket.value.send(
-            //     JSON.stringify({
-            //       type: "resize",
-            //       rows: term.value.rows,
-            //       cols: term.value.cols,
-            //     })
-            // );
           }
         } catch (e) {
           console.error(e);
@@ -106,8 +96,20 @@ export default defineComponent({
         socket.value.send("0" + cmd)
       })
     }
+
+    const closeSocket = () => {
+      socket.value.close()
+      term.value.dispose()
+    }
+
+    // 卸载前
+    onBeforeUnmount(() => {
+      closeSocket()
+    })
+
+
     return {
-      initSocket
+      initSocket, closeSocket
     }
   }
 });
