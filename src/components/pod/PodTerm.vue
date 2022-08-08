@@ -12,8 +12,8 @@
 
 <script>
 import {defineComponent, ref} from 'vue'
-import TermForm from "@/components/TermForm";
-import TermWin from "@/components/TermWin";
+import TermForm from "./TermForm.vue";
+import TermWin from "./TermWin.vue";
 
 export default defineComponent({
   components: { TermWin, TermForm },

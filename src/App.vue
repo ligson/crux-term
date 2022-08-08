@@ -1,15 +1,21 @@
 <template>
-  <MyTerm/>
+  <router-view></router-view>
 </template>
 
 <script lang="ts">
+import {ref} from 'vue';
+
 import {Options, Vue} from 'vue-class-component';
-import MyTerm from "@/components/MyTerm.vue";
 
 @Options({
-  components: {
-    MyTerm,
-  },
+  data() {
+    const defaultSelectedKeys = ref([]);
+    const defaultOpenKeys = ref([]);
+    return {
+      defaultSelectedKeys,
+      defaultOpenKeys
+    }
+  }
 })
 export default class App extends Vue {
 }

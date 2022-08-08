@@ -98,8 +98,12 @@ export default defineComponent({
     }
 
     const closeSocket = () => {
-      socket.value.close()
-      term.value.dispose()
+      if (socket.value) {
+        socket.value.close()
+      }
+      if (term.value) {
+        term.value.dispose()
+      }
     }
 
     // 卸载前
@@ -116,7 +120,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
-@import url('xterm/css/xterm.css');
+@import "xterm/css/xterm.css";
 
 #xterm-container {
   width: 100%;
